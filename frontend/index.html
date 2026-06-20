@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 560px;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: #888;
+            margin-bottom: 36px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .field-hint {
+            font-size: 0.75rem;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #444;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #e0e0e0;
+        }
+
+        button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .result {
+            display: none;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 28px 32px;
+        }
+
+        .segment-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .Champions {
+            background: #0d2b1a;
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        .Loyal {
+            background: #0d1b2b;
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+
+        .At-Risk {
+            background: #2b1d0d;
+            color: #e67e22;
+            border: 1px solid #e67e22;
+        }
+
+        .Hibernating {
+            background: #2b0d0d;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .result-section {
+            margin-bottom: 16px;
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #2a2a2a;
+            margin: 20px 0;
+        }
+
+        .rfm-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .rfm-item {
+            background: #111;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .rfm-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .rfm-label {
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .loading {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Customer Segmentation</h1>
+        <p class="subtitle">Enter customer RFM data to predict their segment and get marketing recommendations.</p>
+
+        <div class="card">
+            <div class="field">
+                <label>Recency</label>
+                <div class="field-hint">Days since last purchase</div>
+                <input type="number" id="recency" placeholder="e.g. 15" min="1">
+            </div>
+            <div class="field">
+                <label>Frequency</label>
+                <div class="field-hint">Number of unique invoices</div>
+                <input type="number" id="frequency" placeholder="e.g. 12" min="1">
+            </div>
+            <div class="field">
+                <label>Monetary (£)</label>
+                <div class="field-hint">Total spend in GBP</div>
+                <input type="number" id="monetary" placeholder="e.g. 8500" min="1">
+            </div>
+            <div class="field">
+                <label>Avg Order Value (£)</label>
+                <div class="field-hint">Average spend per invoice</div>
+                <input type="number" id="avg_order_value" placeholder="e.g. 708" min="1">
+            </div>
+            <div class="field">
+                <label>Customer Lifetime (days)</label>
+                <div class="field-hint">Days between first and last purchase</div>
+                <input type="number" id="customer_lifetime" placeholder="e.g. 280" min="0">
+            </div>
+            <button id="predictBtn" onclick="predict()">Predict Segment</button>
+            <div class="error" id="error">Something went wrong. Please try again.</div>
+        </div>
+
+        <div class="result" id="result">
+            <div class="segment-badge" id="badge"></div>
+            <div class="result-title" id="segmentName"></div>
+            <div class="result-section">
+                <div class="result-label">Strategy</div>
+                <div class="result-value" id="strategy"></div>
+            </div>
+            <hr class="divider">
+            <div class="result-section">
+                <div class="result-label">Top Action</div>
+                <div class="result-value" id="topAction"></div>
+            </div>
+            <hr class="divider">
+            <div class="result-label">Input Summary</div>
+            <div class="rfm-grid">
+                <div class="rfm-item">
+                    <div class="rfm-value" id="r-val"></div>
+                    <div class="rfm-label">Recency (days)</div>
+                </div>
+                <div class="rfm-item">
+                    <div class="rfm-value" id="f-val"></div>
+                    <div class="rfm-label">Frequency</div>
+                </div>
+                <div class="rfm-item">
+                    <div class="rfm-value" id="m-val"></div>
+                    <div class="rfm-label">Monetary (£)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'https://ml-unsupervised-suite.onrender.com';
+
+        async function predict() {
+            const btn = document.getElementById('predictBtn');
+            const error = document.getElementById('error');
+            const result = document.getElementById('result');
+            error.style.display = 'none';
+            result.style.display = 'none';
+
+            const fields = ['recency', 'frequency', 'monetary', 'avg_order_value', 'customer_lifetime'];
+            const values = {};
+            for (const f of fields) {
+                const val = parseFloat(document.getElementById(f).value);
+                if (isNaN(val) || val < 0) {
+                    error.textContent = 'Please fill in all fields with valid numbers.';
+                    error.style.display = 'block';
+                    return;
+                }
+                values[f] = val;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Predicting...';
+
+            try {
+                const res = await fetch(`${API}/predict`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(values)
+                });
+
+                if (!res.ok) throw new Error('API error');
+                const data = await res.json();
+
+                const segmentClass = data.segment.replace(' ', '-');
+                document.getElementById('badge').textContent = data.segment;
+                document.getElementById('badge').className = `segment-badge ${segmentClass}`;
+                document.getElementById('segmentName').textContent = data.segment;
+                document.getElementById('strategy').textContent = data.strategy;
+                document.getElementById('topAction').textContent = data.top_action;
+                document.getElementById('r-val').textContent = data.recency;
+                document.getElementById('f-val').textContent = data.frequency;
+                document.getElementById('m-val').textContent = `£${data.monetary.toLocaleString()}`;
+
+                result.style.display = 'block';
+            } catch (e) {
+                error.textContent = 'API request failed. The server may be waking up — wait 30 seconds and try again.';
+                error.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Predict Segment';
+            }
+        }
+    </script>
+</body>
+
+</html>
