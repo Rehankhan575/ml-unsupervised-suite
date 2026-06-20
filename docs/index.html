@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Segmentation</title>
+    <title>Customer Segmentation — ML Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -14,286 +14,563 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0f0f0f;
+            background: #0a0a0a;
             color: #e0e0e0;
             min-height: 100vh;
+        }
+
+        .hero {
+            border-bottom: 1px solid #1a1a1a;
+            padding: 60px 40px 50px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #555;
+            border: 1px solid #222;
+            border-radius: 4px;
+            padding: 3px 10px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            color: #777;
+            line-height: 1.7;
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
+
+        .stats {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
+            gap: 40px;
+            flex-wrap: wrap;
         }
 
-        .container {
-            width: 100%;
-            max-width: 560px;
+        .stat-item {
+            display: flex;
+            flex-direction: column;
         }
 
-        h1 {
-            font-size: 1.6rem;
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .segments-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 40px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .segments-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .segment-card {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .segment-card .name {
+            font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 6px;
-            color: #ffffff;
         }
 
-        .subtitle {
-            font-size: 0.875rem;
+        .segment-card .desc {
+            font-size: 0.8rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .segment-card .meta {
+            display: flex;
+            gap: 16px;
+        }
+
+        .meta-item {
+            font-size: 0.72rem;
+            color: #444;
+        }
+
+        .meta-item span {
             color: #888;
-            margin-bottom: 36px;
+            font-weight: 600;
         }
 
-        .card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
+        .champions .name {
+            color: #2ecc71;
+        }
+
+        .loyal .name {
+            color: #3498db;
+        }
+
+        .atrisk .name {
+            color: #e67e22;
+        }
+
+        .hibernating .name {
+            color: #e74c3c;
+        }
+
+        .champions {
+            border-left: 2px solid #2ecc71;
+        }
+
+        .loyal {
+            border-left: 2px solid #3498db;
+        }
+
+        .atrisk {
+            border-left: 2px solid #e67e22;
+        }
+
+        .hibernating {
+            border-left: 2px solid #e74c3c;
+        }
+
+        .predict-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .predict-left h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .predict-left p {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .example-profiles {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .example-btn {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .example-btn:hover {
+            border-color: #333;
+        }
+
+        .example-btn .ex-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .example-btn .ex-desc {
+            font-size: 0.72rem;
+            color: #555;
+        }
+
+        .ex-champions {
+            color: #2ecc71;
+        }
+
+        .ex-loyal {
+            color: #3498db;
+        }
+
+        .ex-atrisk {
+            color: #e67e22;
+        }
+
+        .ex-hibernating {
+            color: #e74c3c;
+        }
+
+        .form-card {
+            background: #111;
+            border: 1px solid #1e1e1e;
             border-radius: 12px;
-            padding: 32px;
-            margin-bottom: 20px;
+            padding: 28px;
         }
 
         .field {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         label {
             display: block;
-            font-size: 0.8rem;
-            color: #aaa;
-            margin-bottom: 6px;
+            font-size: 0.72rem;
+            color: #555;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-        }
-
-        .field-hint {
-            font-size: 0.75rem;
-            color: #555;
             margin-bottom: 6px;
         }
 
         input {
             width: 100%;
-            background: #111;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 10px 14px;
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 7px;
+            padding: 9px 12px;
             color: #e0e0e0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
             transition: border-color 0.2s;
         }
 
         input:focus {
-            border-color: #444;
+            border-color: #333;
         }
 
-        button {
+        .predict-btn {
             width: 100%;
-            padding: 12px;
-            background: #ffffff;
-            color: #000000;
+            padding: 11px;
+            background: #fff;
+            color: #000;
             border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
+            border-radius: 7px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
             margin-top: 8px;
+            transition: background 0.2s;
         }
 
-        button:hover {
-            background: #e0e0e0;
+        .predict-btn:hover {
+            background: #ddd;
         }
 
-        button:disabled {
-            background: #333;
-            color: #666;
+        .predict-btn:disabled {
+            background: #1e1e1e;
+            color: #444;
             cursor: not-allowed;
         }
 
-        .result {
+        .result-card {
             display: none;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 28px 32px;
+            margin-top: 16px;
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
         }
 
-        .segment-badge {
-            display: inline-block;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .Champions {
-            background: #0d2b1a;
-            color: #2ecc71;
-            border: 1px solid #2ecc71;
-        }
-
-        .Loyal {
-            background: #0d1b2b;
-            color: #3498db;
-            border: 1px solid #3498db;
-        }
-
-        .At-Risk {
-            background: #2b1d0d;
-            color: #e67e22;
-            border: 1px solid #e67e22;
-        }
-
-        .Hibernating {
-            background: #2b0d0d;
-            color: #e74c3c;
-            border: 1px solid #e74c3c;
-        }
-
-        .result-title {
-            font-size: 1.4rem;
+        .result-segment {
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
-        .result-section {
-            margin-bottom: 16px;
+        .result-row {
+            margin-bottom: 10px;
         }
 
-        .result-label {
-            font-size: 0.75rem;
-            color: #555;
+        .result-row .rl {
+            font-size: 0.7rem;
+            color: #444;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
-        .result-value {
-            font-size: 0.9rem;
-            color: #ccc;
+        .result-row .rv {
+            font-size: 0.82rem;
+            color: #aaa;
             line-height: 1.5;
         }
 
         .divider {
             border: none;
-            border-top: 1px solid #2a2a2a;
-            margin: 20px 0;
+            border-top: 1px solid #1a1a1a;
+            margin: 12px 0;
         }
 
-        .rfm-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .rfm-item {
-            background: #111;
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .rfm-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .rfm-label {
-            font-size: 0.7rem;
-            color: #555;
-            margin-top: 2px;
-        }
-
-        .error {
-            color: #e74c3c;
-            font-size: 0.85rem;
-            margin-top: 10px;
+        .error-msg {
             display: none;
+            font-size: 0.8rem;
+            color: #e74c3c;
+            margin-top: 8px;
         }
 
-        .loading {
-            opacity: 0.6;
+        .tech-stack {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 40px;
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .tech-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            font-size: 0.72rem;
+            color: #444;
+            border: 1px solid #1e1e1e;
+            border-radius: 4px;
+            padding: 3px 8px;
+        }
+
+        .github-link {
+            font-size: 0.8rem;
+            color: #444;
+            text-decoration: none;
+            border: 1px solid #1e1e1e;
+            border-radius: 6px;
+            padding: 6px 14px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .github-link:hover {
+            color: #aaa;
+            border-color: #333;
+        }
+
+        @media (max-width: 700px) {
+            .predict-section {
+                grid-template-columns: 1fr;
+            }
+
+            .segments-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Customer Segmentation</h1>
-        <p class="subtitle">Enter customer RFM data to predict their segment and get marketing recommendations.</p>
 
-        <div class="card">
-            <div class="field">
-                <label>Recency</label>
-                <div class="field-hint">Days since last purchase</div>
-                <input type="number" id="recency" placeholder="e.g. 15" min="1">
+    <div class="hero">
+        <div class="tag">ML Portfolio Project</div>
+        <h1>Customer Segmentation<br>with RFM & K-Means</h1>
+        <p>A production-grade unsupervised learning system trained on 397,884 UK e-commerce transactions. Segments
+            customers into four behavioral groups using RFM feature engineering and K-Means clustering, served via a
+            FastAPI backend containerized with Docker.</p>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-value">4,338</span>
+                <span class="stat-label">Customers segmented</span>
             </div>
-            <div class="field">
-                <label>Frequency</label>
-                <div class="field-hint">Number of unique invoices</div>
-                <input type="number" id="frequency" placeholder="e.g. 12" min="1">
+            <div class="stat-item">
+                <span class="stat-value">74.7%</span>
+                <span class="stat-label">Revenue from top 21.9%</span>
             </div>
-            <div class="field">
-                <label>Monetary (£)</label>
-                <div class="field-hint">Total spend in GBP</div>
-                <input type="number" id="monetary" placeholder="e.g. 8500" min="1">
+            <div class="stat-item">
+                <span class="stat-value">£88,553</span>
+                <span class="stat-label">At-risk reactivation potential</span>
             </div>
-            <div class="field">
-                <label>Avg Order Value (£)</label>
-                <div class="field-hint">Average spend per invoice</div>
-                <input type="number" id="avg_order_value" placeholder="e.g. 708" min="1">
+            <div class="stat-item">
+                <span class="stat-value">0.2794</span>
+                <span class="stat-label">Silhouette score (K=4)</span>
             </div>
-            <div class="field">
-                <label>Customer Lifetime (days)</label>
-                <div class="field-hint">Days between first and last purchase</div>
-                <input type="number" id="customer_lifetime" placeholder="e.g. 280" min="0">
-            </div>
-            <button id="predictBtn" onclick="predict()">Predict Segment</button>
-            <div class="error" id="error">Something went wrong. Please try again.</div>
         </div>
+    </div>
 
-        <div class="result" id="result">
-            <div class="segment-badge" id="badge"></div>
-            <div class="result-title" id="segmentName"></div>
-            <div class="result-section">
-                <div class="result-label">Strategy</div>
-                <div class="result-value" id="strategy"></div>
-            </div>
-            <hr class="divider">
-            <div class="result-section">
-                <div class="result-label">Top Action</div>
-                <div class="result-value" id="topAction"></div>
-            </div>
-            <hr class="divider">
-            <div class="result-label">Input Summary</div>
-            <div class="rfm-grid">
-                <div class="rfm-item">
-                    <div class="rfm-value" id="r-val"></div>
-                    <div class="rfm-label">Recency (days)</div>
+    <div class="segments-section">
+        <div class="section-title">The four segments</div>
+        <div class="segments-grid">
+            <div class="segment-card champions">
+                <div class="name">Champions</div>
+                <div class="desc">Bought recently, buy often, spend the most. Core business drivers.</div>
+                <div class="meta">
+                    <div class="meta-item">Customers <span>951 (21.9%)</span></div>
+                    <div class="meta-item">Revenue share <span>74.7%</span></div>
                 </div>
-                <div class="rfm-item">
-                    <div class="rfm-value" id="f-val"></div>
-                    <div class="rfm-label">Frequency</div>
+            </div>
+            <div class="segment-card loyal">
+                <div class="name">Loyal</div>
+                <div class="desc">Moderate recency and frequency. High growth potential with upselling.</div>
+                <div class="meta">
+                    <div class="meta-item">Customers <span>1,321 (30.4%)</span></div>
+                    <div class="meta-item">Revenue share <span>13.3%</span></div>
                 </div>
-                <div class="rfm-item">
-                    <div class="rfm-value" id="m-val"></div>
-                    <div class="rfm-label">Monetary (£)</div>
+            </div>
+            <div class="segment-card atrisk">
+                <div class="name">At Risk</div>
+                <div class="desc">Haven't purchased in ~5 months. Reasonable spend history. Reactivation candidates.
+                </div>
+                <div class="meta">
+                    <div class="meta-item">Customers <span>1,058 (24.4%)</span></div>
+                    <div class="meta-item">Revenue share <span>9.9%</span></div>
+                </div>
+            </div>
+            <div class="segment-card hibernating">
+                <div class="name">Hibernating</div>
+                <div class="desc">Long inactive, low value. Minimal marketing ROI — one final offer then suppress.</div>
+                <div class="meta">
+                    <div class="meta-item">Customers <span>1,008 (23.2%)</span></div>
+                    <div class="meta-item">Revenue share <span>2.0%</span></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="predict-section">
+        <div class="predict-left">
+            <h2>Try the model</h2>
+            <p>Enter a customer's RFM values to predict their segment and get a marketing recommendation. Or load one of
+                the example profiles below.</p>
+            <div class="example-profiles">
+                <button class="example-btn" onclick="loadExample(15,12,8500,708,280)">
+                    <div class="ex-name ex-champions">Champions profile</div>
+                    <div class="ex-desc">Recency 15d · Frequency 12 · Monetary £8,500</div>
+                </button>
+                <button class="example-btn" onclick="loadExample(46,4,900,248,193)">
+                    <div class="ex-name ex-loyal">Loyal profile</div>
+                    <div class="ex-desc">Recency 46d · Frequency 4 · Monetary £900</div>
+                </button>
+                <button class="example-btn" onclick="loadExample(147,1,837,633,27)">
+                    <div class="ex-name ex-atrisk">At Risk profile</div>
+                    <div class="ex-desc">Recency 147d · Frequency 1 · Monetary £837</div>
+                </button>
+                <button class="example-btn" onclick="loadExample(160,1,179,142,22)">
+                    <div class="ex-name ex-hibernating">Hibernating profile</div>
+                    <div class="ex-desc">Recency 160d · Frequency 1 · Monetary £179</div>
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <div class="form-card">
+                <div class="field">
+                    <label>Recency (days since last purchase)</label>
+                    <input type="number" id="recency" placeholder="e.g. 15" min="1">
+                </div>
+                <div class="field">
+                    <label>Frequency (unique invoices)</label>
+                    <input type="number" id="frequency" placeholder="e.g. 12" min="1">
+                </div>
+                <div class="field">
+                    <label>Monetary £ (total spend)</label>
+                    <input type="number" id="monetary" placeholder="e.g. 8500" min="1">
+                </div>
+                <div class="field">
+                    <label>Avg Order Value £</label>
+                    <input type="number" id="avg_order_value" placeholder="e.g. 708" min="1">
+                </div>
+                <div class="field">
+                    <label>Customer Lifetime (days)</label>
+                    <input type="number" id="customer_lifetime" placeholder="e.g. 280" min="0">
+                </div>
+                <button class="predict-btn" id="predictBtn" onclick="predict()">Predict Segment</button>
+                <div class="error-msg" id="error"></div>
+            </div>
+
+            <div class="result-card" id="result">
+                <div class="result-segment" id="segmentName"></div>
+                <div class="result-row">
+                    <div class="rl">Strategy</div>
+                    <div class="rv" id="strategy"></div>
+                </div>
+                <hr class="divider">
+                <div class="result-row">
+                    <div class="rl">Top Action</div>
+                    <div class="rv" id="topAction"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tech-stack">
+        <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Scikit-learn</span>
+            <span class="tech-tag">FastAPI</span>
+            <span class="tech-tag">Docker</span>
+            <span class="tech-tag">MLflow</span>
+            <span class="tech-tag">K-Means</span>
+            <span class="tech-tag">RFM</span>
+            <span class="tech-tag">PCA</span>
+        </div>
+        <a href="https://github.com/RehanKhan575/ml-unsupervised-suite" class="github-link" target="_blank">View on
+            GitHub →</a>
+    </div>
+
     <script>
         const API = 'https://ml-unsupervised-suite.onrender.com';
+
+        const COLORS = {
+            'Champions': '#2ecc71',
+            'Loyal': '#3498db',
+            'At Risk': '#e67e22',
+            'Hibernating': '#e74c3c'
+        };
+
+        function loadExample(r, f, m, aov, cl) {
+            document.getElementById('recency').value = r;
+            document.getElementById('frequency').value = f;
+            document.getElementById('monetary').value = m;
+            document.getElementById('avg_order_value').value = aov;
+            document.getElementById('customer_lifetime').value = cl;
+        }
 
         async function predict() {
             const btn = document.getElementById('predictBtn');
             const error = document.getElementById('error');
             const result = document.getElementById('result');
+
             error.style.display = 'none';
             result.style.display = 'none';
 
@@ -322,19 +599,15 @@
                 if (!res.ok) throw new Error('API error');
                 const data = await res.json();
 
-                const segmentClass = data.segment.replace(' ', '-');
-                document.getElementById('badge').textContent = data.segment;
-                document.getElementById('badge').className = `segment-badge ${segmentClass}`;
+                const color = COLORS[data.segment] || '#fff';
                 document.getElementById('segmentName').textContent = data.segment;
+                document.getElementById('segmentName').style.color = color;
                 document.getElementById('strategy').textContent = data.strategy;
                 document.getElementById('topAction').textContent = data.top_action;
-                document.getElementById('r-val').textContent = data.recency;
-                document.getElementById('f-val').textContent = data.frequency;
-                document.getElementById('m-val').textContent = `£${data.monetary.toLocaleString()}`;
-
                 result.style.display = 'block';
+
             } catch (e) {
-                error.textContent = 'API request failed. The server may be waking up — wait 30 seconds and try again.';
+                error.textContent = 'Request failed. The server may be waking up — wait 30 seconds and try again.';
                 error.style.display = 'block';
             } finally {
                 btn.disabled = false;
